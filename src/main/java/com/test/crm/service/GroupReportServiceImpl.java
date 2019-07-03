@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,9 @@ public class GroupReportServiceImpl implements GroupReportService {
 
     @Value("${group.report.output.path}")
     private String groupReportOutputPath;
+
+    @Value("${file.extension.xlsx}")
+    private String fileExtensionXlsx;
 
     public GroupReportServiceImpl(GroupService groupService) {
         this.groupService = groupService;
@@ -50,7 +55,9 @@ public class GroupReportServiceImpl implements GroupReportService {
         configuration.setOnePagePerSheet(true);
         configuration.setIgnoreGraphics(false);
 
-        File outputFile = new File(groupReportOutputPath);
+        StringBuffer sb = new StringBuffer(30);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS");
+        File outputFile = new File(sb.append(groupReportOutputPath).append(format.format(new Date())).append(fileExtensionXlsx).toString());
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
              OutputStream fileOutputStream = new FileOutputStream(outputFile)) {
             Exporter exporter = new JRXlsxExporter();

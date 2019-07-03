@@ -6,7 +6,6 @@
     <field name="id" class="java.lang.Long"/>
     <field name="name" class="java.lang.String"/>
     <field name="createdAt" class="java.lang.String"/>
-<!--    <field name="createdAt" class="java.util.Date"/>-->
     <field name="article" class="java.lang.String"/>
     <field name="groupId" class="java.lang.Long"/>
 

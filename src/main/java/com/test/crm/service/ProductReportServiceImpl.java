@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,9 @@ public class ProductReportServiceImpl implements ProductReportService {
 
     @Value("${product.report.output.path}")
     private String productReportOutputPath;
+
+    @Value("${file.extension.xlsx}")
+    private String fileExtensionXlsx;
 
     public ProductReportServiceImpl(ProductService productService) {
         this.productService = productService;
@@ -51,8 +56,9 @@ public class ProductReportServiceImpl implements ProductReportService {
         SimpleXlsxReportConfiguration configuration = new SimpleXlsxReportConfiguration();
         configuration.setOnePagePerSheet(true);
         configuration.setIgnoreGraphics(false);
-
-        File outputFile = new File(productReportOutputPath);
+        StringBuffer sb = new StringBuffer(30);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS");
+        File outputFile = new File(sb.append(productReportOutputPath).append(format.format(new Date())).append(fileExtensionXlsx).toString());
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
              OutputStream fileOutputStream = new FileOutputStream(outputFile)) {
             Exporter exporter = new JRXlsxExporter();
